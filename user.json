@@ -1,0 +1,18 @@
+[
+    {
+        "model": "cms.CmsUsersMaster",
+        "pk": 1,
+        "fields": {
+          "email_id": "admin@gmail.com",
+          "role_type": "admin",
+          "password": "admin@123",
+          "full_name": "admin",
+          "address": "xyz",
+          "city": "vapi",
+          "state": "gujarat",
+          "country": "india",
+          "pincode": "396191"
+        }
+    },
+]
+

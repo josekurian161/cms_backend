@@ -1,0 +1,20 @@
+[
+{
+    "model": "cms.cmsusersmaster",
+    "pk": 1,
+    "fields": {
+        "role_type": "admin",
+        "email_id": "",
+        "password": "",
+        "full_name": "",
+        "address": null,
+        "city": null,
+        "state": null,
+        "country": null,
+        "pincode": "",
+        "is_active": true,
+        "created_at": "2021-03-27T16:45:27.785Z",
+        "updated_at": "2021-03-27T16:45:27.786Z"
+    }
+}
+]
