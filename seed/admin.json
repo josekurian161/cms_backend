@@ -4,8 +4,8 @@
     "pk": 1,
     "fields": {
         "role_type": "admin",
-        "email_id": "",
-        "password": "",
+        "email_id": "admin@gmail.com",
+        "password": "pbkdf2_sha256$216000$zBtGeaJwYkD1$Pxjga6bUcqgcq9++7MVEAXzxRI+amddGarTzSnoMOeU=",
         "full_name": "",
         "address": null,
         "city": null,
