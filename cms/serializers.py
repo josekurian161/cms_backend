@@ -156,7 +156,7 @@ class UsersContentSerializer(serializers.Serializer):
             user_content_obj.pdf_document_path = file_path
             user_content_obj.save()
 
-    def list(self, value):
+    def get_list(self, value):
         offset = value.get("offset", 0)
         limit = value.get("limit", 10)
         kwargs = {}

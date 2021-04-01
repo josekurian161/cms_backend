@@ -11,8 +11,7 @@ def login(self, request):
     try:
         with transaction.atomic():
             request_data = request.data
-            is_valid = LoginSerializer(data=request_data).is_valid()
-            if not is_valid:
+            if not LoginSerializer(data=request_data).is_valid():
                 return shared.basic_response(message=error_messages.INVALID_REQUEST,
                                              status=status.HTTP_400_BAD_REQUEST,
                                              view=self.get_view_name())
@@ -27,9 +26,8 @@ def login(self, request):
                                                     username=request_data.get("email_id"))
             if not auth_token:
                 return shared.basic_response(message=error_messages.SOMETHING_WENT_WRONG,
-                                      status=status.HTTP_412_PRECONDITION_FAILED,
-                                      view=self.get_view_name())
-            print(auth_token)
+                                             status=status.HTTP_412_PRECONDITION_FAILED,
+                                             view=self.get_view_name())
             serialized_data["token"] = auth_token.get("token", None)
             response_translator = shared.response_translator(self, serialized_data)
             return shared.basic_response(message=response_translator,
@@ -46,11 +44,10 @@ def normalize_query(query_string,
 
 
 def get_query(query_string, search_fields):
-
-    query = None  # Query to search for every search term
+    query = None
     terms = normalize_query(query_string)
     for term in terms:
-        or_query = None  # Query to search for a given term in each field
+        or_query = None
         for field_name in search_fields:
             q = Q(**{"%s__icontains" % field_name: term})
             if or_query is None:
@@ -68,13 +65,11 @@ def register(self, request):
     try:
         with transaction.atomic():
             request_data = request.data
-            is_valid = RegistrationSerializer(data=request_data).is_valid()
-            if not is_valid:
+            if not RegistrationSerializer(data=request_data).is_valid():
                 return shared.basic_response(message=error_messages.INVALID_REQUEST,
                                              status=status.HTTP_400_BAD_REQUEST,
                                              view=self.get_view_name())
-            is_exist = RegistrationSerializer.get(self, request_data)
-            if is_exist:
+            if RegistrationSerializer.get(self, request_data):
                 return shared.basic_response(message=error_messages.USER_ALREADY_EXIST,
                                              status=status.HTTP_412_PRECONDITION_FAILED,
                                              view=self.get_view_name())
@@ -91,76 +86,70 @@ def register(self, request):
 
 def add_content(self, request):
     try:
-        with transaction.atomic():
-            request_data = request.data
-            is_valid = UsersContentSerializer(data=request_data).is_valid()
-            if not is_valid:
-                return shared.basic_response(message=error_messages.INVALID_REQUEST,
-                                             status=status.HTTP_400_BAD_REQUEST,
-                                             view=self.get_view_name())
-            UsersContentSerializer.create(self, request_data)
-            return shared.basic_response(message=error_messages.DATA_SAVED_SUCCESSFULLY,
-                                         status=status.HTTP_200_OK,
+        request_data = request.data
+        if not UsersContentSerializer(data=request_data).is_valid():
+            return shared.basic_response(message=error_messages.INVALID_REQUEST,
+                                         status=status.HTTP_400_BAD_REQUEST,
                                          view=self.get_view_name())
+        UsersContentSerializer.create(self, request_data)
+        return shared.basic_response(message=error_messages.DATA_SAVED_SUCCESSFULLY,
+                                     status=status.HTTP_200_OK,
+                                     view=self.get_view_name())
     except Exception as ex:
         return shared.main_exception(self.get_view_name(), ex)
 
 
 def update_content(self, request):
     try:
-        with transaction.atomic():
-            request_data = request.data
-            if not request_data.get("content_id", None):
-                return shared.basic_response(message=error_messages.INVALID_REQUEST,
-                                             status=status.HTTP_400_BAD_REQUEST,
-                                             view=self.get_view_name())
-            is_valid = UsersContentSerializer(data=request_data).is_valid()
-            if not is_valid:
-                return shared.basic_response(message=error_messages.INVALID_REQUEST,
-                                             status=status.HTTP_400_BAD_REQUEST,
-                                             view=self.get_view_name())
-            user_content_obj = UsersContentSerializer.get(self, request_data)
-            if not user_content_obj:
-                return shared.basic_response(message=error_messages.INVALID_REQUEST,
-                                             status=status.HTTP_400_BAD_REQUEST,
-                                             view=self.get_view_name())
-            UsersContentSerializer.update(self, request_data, user_content_obj)
-            return shared.basic_response(message=error_messages.DATA_UPDATED_SUCCESSFULLY,
-                                         status=status.HTTP_200_OK,
+        request_data = request.data
+        if not request_data.get("content_id", None):
+            return shared.basic_response(message=error_messages.INVALID_REQUEST,
+                                         status=status.HTTP_400_BAD_REQUEST,
                                          view=self.get_view_name())
+        if not UsersContentSerializer(data=request_data).is_valid():
+            return shared.basic_response(message=error_messages.INVALID_REQUEST,
+                                         status=status.HTTP_400_BAD_REQUEST,
+                                         view=self.get_view_name())
+        user_content_obj = UsersContentSerializer.get(self, request_data)
+        if not user_content_obj:
+            return shared.basic_response(message=error_messages.INVALID_REQUEST,
+                                         status=status.HTTP_400_BAD_REQUEST,
+                                         view=self.get_view_name())
+        UsersContentSerializer.update(self, request_data, user_content_obj)
+        return shared.basic_response(message=error_messages.DATA_UPDATED_SUCCESSFULLY,
+                                     status=status.HTTP_200_OK,
+                                     view=self.get_view_name())
     except Exception as ex:
         return shared.main_exception(self.get_view_name(), ex)
 
 
 def list_content(self, request):
     try:
-        with transaction.atomic():
-            request_data = request.data
-            users_content_list = UsersContentSerializer.list(self, request_data)
-            if not users_content_list:
-                return shared.basic_response(message=error_messages.DATA_NOT_FOUND,
-                                             status=status.HTTP_404_NOT_FOUND,
-                                             view=self.get_view_name())
-            serialized_data = UsersContentModelSerializer(users_content_list, many=True).data
-            response_translator = shared.response_translator(self, serialized_data)
-            return shared.basic_response(message=response_translator,
-                                         status=status.HTTP_200_OK,
+        request_data = request.data
+        users_content_list = UsersContentSerializer.get_list(self, request_data)
+        if not users_content_list:
+            return shared.basic_response(message=error_messages.DATA_NOT_FOUND,
+                                         status=status.HTTP_404_NOT_FOUND,
                                          view=self.get_view_name())
+        serialized_data = UsersContentModelSerializer(users_content_list, many=True).data
+        response_translator = shared.response_translator(self, serialized_data)
+        return shared.basic_response(message=response_translator,
+                                     status=status.HTTP_200_OK,
+                                     view=self.get_view_name())
     except Exception as ex:
         return shared.main_exception(self.get_view_name(), ex)
 
 
 def delete_content(self, request):
     try:
-        with transaction.atomic():
-            request_data = request.data
-            if not request_data.get("content_id", None):
-                return shared.basic_response(message=error_messages.INVALID_REQUEST,
-                                             status=status.HTTP_400_BAD_REQUEST,
-                                             view=self.get_view_name())
-            UsersContentSerializer.delete(self, request_data)
-            return shared.basic_response(message=error_messages.DATA_DELETED_SUCCESSFULLY,
-                                         status=status.HTTP_200_OK,
+        request_data = request.data
+        if not request_data.get("content_id", None):
+            return shared.basic_response(message=error_messages.INVALID_REQUEST,
+                                         status=status.HTTP_400_BAD_REQUEST,
                                          view=self.get_view_name())
+        UsersContentSerializer.delete(self, request_data)
+        return shared.basic_response(message=error_messages.DATA_DELETED_SUCCESSFULLY,
+                                     status=status.HTTP_200_OK,
+                                     view=self.get_view_name())
     except Exception as ex:
         return shared.main_exception(self.get_view_name(), ex)
