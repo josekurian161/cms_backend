@@ -1,0 +1,15 @@
+[
+{
+    "model": "auth.User",
+    "pk": 1,
+    "fields": {
+        "username": "admin@gmail.com",
+        "password": "pbkdf2_sha256$216000$mrDDWAnZYV6F$mkl//ovVvT0s4DYsoEsAXU5YNWNL9SQKnpFR7tqXJnw=",
+        "is_active": true
+    }
+}
+]
+
+
+
+
