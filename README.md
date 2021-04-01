@@ -1,5 +1,3 @@
-# TMFL: Tata Motors Finance Ltd.
-
 ## Project Setup
 ### Step 1: Clone the repository
 ### Step 2: Install all the requirements by using command
@@ -14,7 +12,7 @@
 ### Run the testcases
 > python manage.py test
 
-load default data
+### Load default data
 python manage.py loaddata seed/admin.json
 python manage.py loaddata seed/auth_user.json
 
